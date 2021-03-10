@@ -71,10 +71,10 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
 	}
 	
 	//check Bulls or Cows
-	int32 Bulls, Cows;
-	GetBullCows(Guess, Bulls, Cows);
-	PrintLine(TEXT("Bulls: %i, Cows: %i"), Bulls, Cows);
-	if (Bulls > 0 || Cows > 0)
+	FBullCowCount Count;
+	GetBullCows(Guess, Count);
+	PrintLine(TEXT("Bulls: %i, Cows: %i"), Count.Bulls, Count.Cows);
+	if (Count.Bulls > 0 || Count.Cows > 0)
 	{
 		return;
 	}
@@ -119,15 +119,15 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& List) co
 	return ValidWords;
 }
 
-void UBullCowCartridge::GetBullCows(const FString& Guess, int32& Bulls, int32& Cows) const
+void UBullCowCartridge::GetBullCows(const FString& Guess, FBullCowCount& Count) const
 {
-	Bulls = 0;
-	Cows = 0;
+	Count.Bulls = 0;
+	Count.Cows = 0;
 	for (int32 Index = 0; Index < Guess.Len(); Index++)
 	{
 		if (Guess[Index] == HiddenWord[Index])
 		{
-			Bulls++;
+			Count.Bulls++;
 		}
 		else
 		{
@@ -137,7 +137,8 @@ void UBullCowCartridge::GetBullCows(const FString& Guess, int32& Bulls, int32& C
 				{
 					if (Guess[Index] == HiddenWord[Other])
 					{
-						Cows++;
+						Count.Cows++;
+						break;
 					}
 				}
 			}
